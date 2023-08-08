@@ -4,8 +4,8 @@ import { type MouseEvent, useCallback } from 'react'
 
 import { useMotionValue, useMotionTemplate, motion } from 'framer-motion'
 import Image from 'next/image'
-import { usePalette } from 'react-palette'
 
+import { usePalette } from '@/hooks/use-palette'
 import { cn } from '@/utils'
 
 const ROTATION_FACTOR = 30
@@ -60,8 +60,8 @@ export const CharacterThumbnail = ({
         )}
         style={
           {
-            '--gradient-from': palette.data.vibrant ?? 'hsl(var(--primary))',
-            '--gradient-to': palette.data.darkMuted ?? 'hsl(var(--primary))',
+            '--gradient-from': palette.data?.vibrant ?? 'hsl(var(--primary))',
+            '--gradient-to': palette.data?.darkMuted ?? 'hsl(var(--primary))',
           } as Record<string, string>
         }
       />
