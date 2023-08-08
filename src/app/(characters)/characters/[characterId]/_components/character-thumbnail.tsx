@@ -1,14 +1,32 @@
 'use client'
 
-import { type MouseEvent, useCallback } from 'react'
+import { useCallback, type MouseEvent } from 'react'
 
-import { useMotionValue, useMotionTemplate, motion } from 'framer-motion'
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  type MotionStyle,
+} from 'framer-motion'
 import Image from 'next/image'
 
 import { usePalette } from '@/hooks/use-palette'
 import { cn } from '@/utils'
 
 const ROTATION_FACTOR = 30
+
+const BlurBlob = ({ className }: { className?: string }) => {
+  return (
+    <div
+      className={cn(
+        'absolute h-52 w-52 rounded-md opacity-50 blur-2xl filter',
+        className,
+      )}
+    />
+  )
+}
+
+const DEFAULT_COLOR = 'hsl(var(--secondary))'
 
 type CharacterThumbnailProps = {
   thumbnail: string
@@ -49,22 +67,30 @@ export const CharacterThumbnail = ({
       className="relative h-[540px] w-full transition-[all_400ms_cubic-bezier(0.03,0.98,0.52,0.99)_0s] will-change-transform sm:w-[400px] md:w-[440px]"
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
-      style={{
-        transform: useMotionTemplate`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1, 1, 1)`,
-        transition: 'all 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s',
-      }}
+      style={
+        {
+          transform: useMotionTemplate`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1, 1, 1)`,
+          transition: 'all 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s',
+
+          '--palette-muted': palette.data?.muted ?? DEFAULT_COLOR,
+          '--palette-vibrant': palette.data?.vibrant ?? DEFAULT_COLOR,
+
+          '--palette-darkMuted': palette.data?.darkMuted ?? DEFAULT_COLOR,
+          '--palette-darkVibrant': palette.data?.darkVibrant ?? DEFAULT_COLOR,
+
+          '--palette-lightMuted': palette.data?.lightMuted ?? DEFAULT_COLOR,
+          '--palette-lightVibrant': palette.data?.lightVibrant ?? DEFAULT_COLOR,
+        } as MotionStyle
+      }
     >
-      <div
-        className={cn(
-          'pulse absolute -inset-px rounded-lg bg-gradient-to-r from-[var(--gradient-from)] to-[var(--gradient-to)] opacity-70 blur-xl',
-        )}
-        style={
-          {
-            '--gradient-from': palette.data?.vibrant ?? 'hsl(var(--primary))',
-            '--gradient-to': palette.data?.darkMuted ?? 'hsl(var(--primary))',
-          } as Record<string, string>
-        }
-      />
+      <BlurBlob className="-left-1 -top-1 bg-[var(--palette-muted)]" />
+      <BlurBlob className="-right-1 -top-1 bg-[var(--palette-darkMuted)]" />
+
+      <BlurBlob className="-left-0 top-1/2 -translate-y-1/2 bg-[var(--palette-lightMuted)]" />
+      <BlurBlob className="-right-0 top-1/2 -translate-y-1/2 bg-[var(--palette-vibrant)]" />
+
+      <BlurBlob className="-bottom-1 -left-1 bg-[var(--palette-darkVibrant)]" />
+      <BlurBlob className="-bottom-1 -right-1 bg-[var(--palette-lightVibrant)]" />
 
       <Image
         src={thumbnail}

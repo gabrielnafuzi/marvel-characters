@@ -1,5 +1,7 @@
 'use client'
 
+import { useTransition } from 'react'
+
 import { useRouter } from 'next/navigation'
 
 import { Dialog, DialogContent } from '@/components/ui/dialog'
@@ -10,13 +12,16 @@ type CharacterDialogProps = {
 
 export const CharacterDialog = ({ children }: CharacterDialogProps) => {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
   return (
     <Dialog
       open
       onOpenChange={(value) => {
-        if (!value) {
-          router.back()
+        if (!value && !isPending) {
+          startTransition(() => {
+            router.back()
+          })
         }
       }}
     >

@@ -9,7 +9,6 @@ export type PaletteColors = {
   darkMuted?: string
   lightVibrant?: string
   lightMuted?: string
-  [name: string]: string | undefined
 }
 
 export const getPalette = async (src: string) => {
