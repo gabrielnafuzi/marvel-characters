@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     default: 'Marvel Characters',
   },
   description: 'A list of Marvel characters.',
+  metadataBase: new URL(siteConfig.url),
   authors: [
     {
       name: 'Gabriel Moraes',

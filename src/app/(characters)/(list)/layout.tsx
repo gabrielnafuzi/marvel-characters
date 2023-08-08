@@ -5,12 +5,13 @@ import { headers } from 'next/headers'
 
 import getQueryClient from '@/lib/query-client.server'
 
-import { makeCharactersQueryOptions } from '../api/get-characters'
+import { makeCharactersQueryOptions } from '../_api/get-characters'
 import { DEFAULT_ORDER_BY } from '../constants'
 import { type OrderBy } from '../schemas'
 
 type HomeLayoutProps = {
   children: React.ReactNode
+  modal: React.ReactNode
 }
 
 const getServerSearchParams = cache(() => {
@@ -19,7 +20,7 @@ const getServerSearchParams = cache(() => {
   return new URLSearchParams(query)
 })
 
-export default async function HomeLayout({ children }: HomeLayoutProps) {
+export default async function HomeLayout({ children, modal }: HomeLayoutProps) {
   const serverSearchParams = getServerSearchParams()
   const queryClient = getQueryClient()
 
@@ -36,5 +37,10 @@ export default async function HomeLayout({ children }: HomeLayoutProps) {
 
   const dehydratedState = dehydrate(queryClient)
 
-  return <Hydrate state={dehydratedState}>{children}</Hydrate>
+  return (
+    <Hydrate state={dehydratedState}>
+      {children}
+      {modal}
+    </Hydrate>
+  )
 }

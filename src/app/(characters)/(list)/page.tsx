@@ -1,6 +1,6 @@
-import { CharacterList } from './components/character-list'
-import { OrderBySelect } from './components/order-by-select'
-import { SearchCharactersInput } from './components/search-characters-input'
+import { CharacterList } from './_components/character-list'
+import { OrderBySelect } from './_components/order-by-select'
+import { SearchCharactersInput } from './_components/search-characters-input'
 
 export default function Home() {
   return (

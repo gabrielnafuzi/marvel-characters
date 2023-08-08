@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 
+import { usePathname } from 'next/navigation'
+
 import { PAGE_QUERY_PARAM } from '@/app/(characters)/constants'
 import {
   Pagination,
@@ -21,6 +23,9 @@ export const CharactersPagination = ({
   total,
   page,
 }: CharactersPaginationProps) => {
+  const pathname = usePathname()
+  const isOnCharactersPage = pathname.startsWith('/characters')
+
   const setQueryStringState = useSetQueryStringState()
 
   const pagination = usePagination({
@@ -37,18 +42,24 @@ export const CharactersPagination = ({
   const stableSetPage = useRef(pagination.setPage).current
 
   useEffect(() => {
+    if (isOnCharactersPage) return
+
     stableSetCount(total)
-  }, [stableSetCount, total])
+  }, [isOnCharactersPage, pathname, stableSetCount, total])
 
   useEffect(() => {
+    if (isOnCharactersPage) return
+
     stableSetPage(page)
-  }, [page, stableSetPage])
+  }, [isOnCharactersPage, page, stableSetPage])
 
   useEffect(() => {
+    if (isOnCharactersPage) return
+
     if (page > pagination.totalPages) {
       setQueryStringState({ [PAGE_QUERY_PARAM]: '1' })
     }
-  }, [page, pagination.totalPages, setQueryStringState])
+  }, [isOnCharactersPage, page, pagination.totalPages, setQueryStringState])
 
   return (
     <Pagination api={pagination}>

@@ -69,6 +69,7 @@ export const CharacterThumbnail = ({
       <Image
         src={thumbnail}
         className="block h-full w-full rounded-sm object-cover object-center"
+        sizes="(min-width: 768px) 400px, 440px"
         alt={name ?? 'Character'}
         fill
       />

@@ -10,6 +10,7 @@ import {
   Laptop,
   Circle,
   ArrowLeft,
+  X,
 } from 'lucide-react'
 
 export const Icons = {
@@ -23,4 +24,5 @@ export const Icons = {
   Laptop,
   Circle,
   ArrowLeft,
+  Close: X,
 }

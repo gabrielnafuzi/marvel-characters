@@ -9,10 +9,10 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import {
   makeCharactersQueryOptions,
   useGetCharactersQuery,
-} from '@/app/(characters)/api/get-characters'
-import { CardListSkeleton } from '@/app/(characters)/components/card-list-skeleton'
-import { CardsGrid } from '@/app/(characters)/components/cards-grid'
-import { ImageWithTitleCard } from '@/app/(characters)/components/image-with-title-card'
+} from '@/app/(characters)/_api/get-characters'
+import { CardListSkeleton } from '@/app/(characters)/_components/card-list-skeleton'
+import { CardsGrid } from '@/app/(characters)/_components/cards-grid'
+import { ImageWithTitleCard } from '@/app/(characters)/_components/image-with-title-card'
 import {
   DEFAULT_ORDER_BY,
   ORDER_BY_SEARCH_PARAM,
