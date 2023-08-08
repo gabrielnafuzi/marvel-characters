@@ -2,7 +2,7 @@
 
 The application has a home page that lists Marvel characters, with a character search feature. When a character is selected, a detailed character page is displayed, including character name, description, and comic book images. There's a back button that returns the user to the character list, maintaining the state of any search or pagination.
 
-Character images default to the Marvel logo if none are provided. Characters without descriptions display a default text. Note that these default behaviors are not handled in the visual components.
+Character images default to the Marvel logo if none are provided. Characters without descriptions display a default text.
 
 ## Live Demo
 
@@ -50,7 +50,7 @@ You can get them at [Marvel Developer Portal](https://developer.marvel.com).
 To start the development server:
 
 ```bash
-pnpm  dev
+pnpm dev
 ```
 
 Open `http://localhost:3000` in your browser.
