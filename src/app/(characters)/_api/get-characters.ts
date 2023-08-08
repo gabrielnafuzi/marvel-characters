@@ -77,7 +77,10 @@ export const makeCharactersQueryOptions = ({
   } satisfies UseQueryOptions<ExtractFnReturnType<QueryFnType>>
 }
 
-export const useGetCharactersQuery = (params: GetCharactersParams) => {
+export const useGetCharactersQuery = (
+  params: GetCharactersParams,
+  { enabled = true }: { enabled?: boolean } = {},
+) => {
   // eslint-disable-next-line @tanstack/query/prefer-query-object-syntax
-  return useQuery(makeCharactersQueryOptions(params))
+  return useQuery({ ...makeCharactersQueryOptions(params), enabled })
 }

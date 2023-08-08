@@ -2,12 +2,11 @@
 
 import * as pagination from '@zag-js/pagination'
 import { normalizeProps, useMachine } from '@zag-js/react'
-import Link from 'next/link'
 
 import { Icons } from '@/components/icons'
 import { cn, createSafeContext } from '@/utils'
 
-import { buttonVariants } from './button'
+import { Button, buttonVariants } from './button'
 
 type PaginationContextValue = {
   api: ReturnType<typeof pagination.connect>
@@ -61,10 +60,9 @@ export const PaginationPrevious = ({
 
   return (
     <li>
-      <Link
-        href="#previous"
+      <Button
+        variant="outline"
         className={cn(
-          buttonVariants({ variant: 'outline', className }),
           api.isFirstPage && 'pointer-events-none opacity-50',
           className,
         )}
@@ -72,7 +70,7 @@ export const PaginationPrevious = ({
       >
         <Icons.ChevronLeft className="h-5 w-5" aria-hidden="true" />
         <span className={cn(!showLabel && 'sr-only')}>Previous</span>
-      </Link>
+      </Button>
     </li>
   )
 }
@@ -85,10 +83,9 @@ export const PaginationNext = ({
 
   return (
     <li>
-      <Link
-        href="#next"
+      <Button
+        variant="outline"
         className={cn(
-          buttonVariants({ variant: 'outline' }),
           api.isLastPage && 'pointer-events-none opacity-50',
           className,
         )}
@@ -96,7 +93,7 @@ export const PaginationNext = ({
       >
         <span className={cn(!showLabel && 'sr-only')}>Next</span>
         <Icons.ChevronRight className="h-5 w-5" aria-hidden="true" />
-      </Link>
+      </Button>
     </li>
   )
 }
@@ -118,19 +115,16 @@ export const PaginationList = ({
         if (page.type === 'page') {
           return (
             <li key={page.value}>
-              <Link
-                href={`#${page.value}`}
+              <Button
+                variant="outline"
                 className={cn(
-                  buttonVariants({
-                    variant: 'outline',
-                  }),
                   'data-[selected]:border-primary data-[selected]:bg-primary data-[selected]:text-primary-foreground',
                   pageClassName,
                 )}
                 {...api.getPageTriggerProps(page)}
               >
                 {page.value}
-              </Link>
+              </Button>
             </li>
           )
         }

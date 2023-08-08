@@ -42,7 +42,14 @@ export default defineConfig({
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: {
+        ...devices['Desktop Firefox'],
+        launchOptions: {
+          firefoxUserPrefs: {
+            'fission.webContentIsolationStrategy': 1,
+          },
+        },
+      },
     },
 
     {
@@ -50,11 +57,11 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
 
-    /* Test against mobile viewports. */
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
     },
+
     {
       name: 'Mobile Safari',
       use: { ...devices['iPhone 12'] },

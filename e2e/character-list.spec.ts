@@ -12,6 +12,18 @@ const waitForLoading = async (page: Page) => {
   await page.waitForTimeout(1000)
 }
 
+const getPageNumber = (page: Page, number: string) => {
+  return page
+    .getByRole('navigation', { name: /pagination/i })
+    .getByRole('button', { name: number })
+}
+
+const getNextPageButton = (page: Page) => {
+  return page
+    .getByRole('navigation', { name: /pagination/i })
+    .getByRole('button', { name: /next/i })
+}
+
 test.beforeEach(async ({ page }) => {
   await page.goto('/')
 })
@@ -92,27 +104,25 @@ test('ordering characters', async ({ page, isMobile }) => {
 
 test('pagination', async ({ page, isMobile }) => {
   const desktop = async () => {
-    const getPageNumber = (number: string) => {
-      return page
-        .getByRole('navigation', { name: /pagination/i })
-        .getByRole('link', { name: number })
-    }
-
     const list = page.getByTestId('cards-grid')
 
     const firstCharacterNameWithDefaultOrder = await getFirstCharacterName(list)
 
     expect(
-      await getPageNumber('1').getAttribute('data-selected'),
+      await getPageNumber(page, '1').getAttribute('data-selected'),
     ).not.toBeNull()
 
-    await getPageNumber('2').click()
-    await waitForLoading(page)
+    await getPageNumber(page, '2').click()
 
-    expect(await getPageNumber('1').getAttribute('data-selected')).toBeNull()
+    await waitForLoading(page)
+    await page.waitForURL(/page=2/)
 
     expect(
-      await getPageNumber('2').getAttribute('data-selected'),
+      await getPageNumber(page, '1').getAttribute('data-selected'),
+    ).toBeNull()
+
+    expect(
+      await getPageNumber(page, '2').getAttribute('data-selected'),
     ).not.toBeNull()
 
     expect(firstCharacterNameWithDefaultOrder).not.toEqual(
@@ -126,20 +136,17 @@ test('pagination', async ({ page, isMobile }) => {
 
     const firstCharacterNameWithDefaultOrder = await getFirstCharacterName(list)
 
-    await page
-      .getByRole('navigation', { name: /pagination/i })
-      .getByRole('link', { name: /next/i })
-      .click()
+    await getNextPageButton(page).click()
 
     await waitForLoading(page)
-    await page.waitForTimeout(500)
+    await page.waitForURL(/page=2/)
 
     expect(firstCharacterNameWithDefaultOrder).not.toEqual(
       await getFirstCharacterName(list),
     )
   }
 
-  isMobile ? await mobile() : await desktop()
+  await (isMobile ? mobile() : desktop())
 })
 
 test('change url when searching', async ({ page, isMobile }) => {
@@ -149,9 +156,7 @@ test('change url when searching', async ({ page, isMobile }) => {
   const desktop = async () => {
     const orderByCombobox = page.getByRole('combobox')
 
-    const pageTwo = page
-      .getByRole('navigation', { name: /pagination/i })
-      .getByRole('link', { name: '2' })
+    const pageTwo = getPageNumber(page, '2')
 
     await searchInput.fill('a')
     await searchButton.click()
@@ -176,29 +181,23 @@ test('change url when searching', async ({ page, isMobile }) => {
   }
 
   const mobile = async () => {
-    const nextPageButton = page
-      .getByRole('navigation', { name: /pagination/i })
-      .getByRole('link', { name: /next/i })
-
-    const orderBySelect = page.locator('select')
-
     await searchInput.fill('a')
     await searchButton.click()
 
     await waitForLoading(page)
 
-    await nextPageButton.click()
+    await getNextPageButton(page).click()
 
     await waitForLoading(page)
 
-    await orderBySelect?.selectOption('Name (Z-A)')
+    await page.locator('select')?.selectOption('Name (Z-A)')
 
     await waitForLoading(page)
 
     expect(page.url()).toContain('search=a&page=2&orderBy=-name')
   }
 
-  isMobile ? await mobile() : await desktop()
+  await (isMobile ? mobile() : desktop())
 })
 
 test('go to character detail', async ({ page }) => {
@@ -207,8 +206,8 @@ test('go to character detail', async ({ page }) => {
   const firstCharacterName = await getFirstCharacterName(list)
 
   await list.getByRole('listitem').first().getByRole('link').click()
-
   await page.waitForURL(/\/characters\/\d+/)
+  await page.reload()
 
   await expect(page).toHaveTitle(`${firstCharacterName} | Marvel Characters`)
 })

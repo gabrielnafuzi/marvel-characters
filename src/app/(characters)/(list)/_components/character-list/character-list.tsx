@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import {
   makeCharactersQueryOptions,
@@ -22,10 +22,12 @@ import {
 import { type Character, type OrderBy } from '@/app/(characters)/schemas'
 import { getThumbnailAsString } from '@/app/(characters)/utils'
 import { Button } from '@/components/ui/button'
+import { usePrevious } from '@/hooks/use-previous'
 
 import { CharactersPagination } from './partials/character-pagination'
 
 export const CharacterList = () => {
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -37,13 +39,25 @@ export const CharacterList = () => {
   const searchParamsPage = searchParams.get(PAGE_QUERY_PARAM)
   const page = searchParamsPage ? Number(searchParamsPage) : 1
 
-  const { status, data, isPreviousData } = useGetCharactersQuery({
-    page,
-    orderBy,
-    search,
-  })
+  const isCharacterPage = pathname.startsWith('/characters')
 
-  const hasMoreData = data && data?.offset + data?.limit < data?.total
+  const {
+    status,
+    data: queryData,
+    isPreviousData,
+  } = useGetCharactersQuery(
+    {
+      page,
+      orderBy,
+      search,
+    },
+    { enabled: !isCharacterPage },
+  )
+
+  const hasMoreData =
+    queryData && queryData?.offset + queryData?.limit < queryData?.total
+
+  const previousQueryData = usePrevious(queryData)
 
   // Prefetch the next page!
   useEffect(() => {
@@ -56,7 +70,15 @@ export const CharacterList = () => {
         }),
       )
     }
-  }, [data, hasMoreData, isPreviousData, orderBy, page, queryClient, search])
+  }, [
+    queryData,
+    hasMoreData,
+    isPreviousData,
+    orderBy,
+    page,
+    queryClient,
+    search,
+  ])
 
   if (status === 'loading') {
     return <CardListSkeleton />
@@ -75,6 +97,10 @@ export const CharacterList = () => {
       </div>
     )
   }
+
+  // We need this because when we show the intercepting character page(@modal/character/[characterId])
+  // we lose the url query params and it shows the data from the first page, so this prevents that to happen
+  const data = isCharacterPage ? previousQueryData! : queryData
 
   if (data.total === 0) {
     return (

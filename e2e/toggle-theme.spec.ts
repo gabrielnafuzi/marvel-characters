@@ -9,20 +9,18 @@ const changeThemeTo = async (
   })
 
   await toggleThemeButton.click()
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(200)
 
   await page
     .getByRole('menu')
     .getByRole('menuitem')
     .getByText(new RegExp(theme, 'i'))
     .click()
-
-  await page.waitForTimeout(1000)
 }
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/')
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(200)
 })
 
 test('change theme to dark', async ({ page }) => {
