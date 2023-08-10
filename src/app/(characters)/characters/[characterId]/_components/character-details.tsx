@@ -30,7 +30,7 @@ export const CharacterDetails = ({ character, hasComics }: CharacterProps) => {
             <h1 className="mb-4 hidden text-4xl font-semibold sm:block">
               {character.name}
             </h1>
-            <p>{character.description}</p>
+            <p className="mt-2 sm:mt-0">{character.description}</p>
           </div>
         </div>
       </section>
