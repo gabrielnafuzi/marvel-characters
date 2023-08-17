@@ -8,7 +8,7 @@ export const env = createEnv({
     MARVEL_API_PRIVATE_KEY: z.string(),
     MARVEL_API_PUBLIC_KEY: z.string(),
     MARVEL_API_URL: z.string().url(),
-    VERCEL_URL: z.string().url().optional(),
+    VERCEL_URL: z.string().optional(),
     PORT: z.coerce.number().default(3000),
   },
 
