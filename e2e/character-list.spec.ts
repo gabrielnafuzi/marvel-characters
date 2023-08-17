@@ -105,16 +105,18 @@ test('ordering characters', async ({ page, isMobile }) => {
 test('pagination', async ({ page, isMobile }) => {
   const desktop = async () => {
     const list = page.getByTestId('cards-grid')
-
     const firstCharacterNameWithDefaultOrder = await getFirstCharacterName(list)
 
     expect(
       await getPageNumber(page, '1').getAttribute('data-selected'),
     ).not.toBeNull()
 
+    await page.waitForTimeout(500)
     await getPageNumber(page, '2').click()
+    await page.waitForTimeout(1000)
 
     await waitForLoading(page)
+
     await page.waitForURL(/page=2/)
 
     expect(
@@ -136,8 +138,9 @@ test('pagination', async ({ page, isMobile }) => {
 
     const firstCharacterNameWithDefaultOrder = await getFirstCharacterName(list)
 
+    await page.waitForTimeout(500)
     await getNextPageButton(page).click()
-
+    await page.waitForTimeout(1000)
     await waitForLoading(page)
     await page.waitForURL(/page=2/)
 
@@ -213,12 +216,9 @@ test('go to character detail', async ({ page }) => {
 })
 
 test('show error message when api fails', async ({ page }) => {
-  await page.route(
-    `${process.env.NEXT_PUBLIC_MARVEL_API_URL}/characters*`,
-    (route) => {
-      return route.abort('failed')
-    },
-  )
+  await page.route(`**/characters*`, (route) => {
+    return route.abort('failed')
+  })
 
   await page.waitForTimeout(1000)
 

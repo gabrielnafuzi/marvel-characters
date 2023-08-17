@@ -9,7 +9,7 @@ const changeThemeTo = async (
   })
 
   await toggleThemeButton.click()
-  await page.waitForTimeout(200)
+  await page.waitForTimeout(400)
 
   await page
     .getByRole('menu')
@@ -20,7 +20,7 @@ const changeThemeTo = async (
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/')
-  await page.waitForTimeout(200)
+  await page.waitForTimeout(400)
 })
 
 test('change theme to dark', async ({ page }) => {
