@@ -1,28 +1,15 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
-import { z } from 'zod'
 
 import { httpClient } from '@/lib/http-client'
 import { type ExtractFnReturnType } from '@/lib/query-client'
 
 import { DEFAULT_ORDER_BY } from '../constants'
-import { characterSchema, type OrderBy } from '../schemas'
+import {
+  getCharactersResponseSchema,
+  type GetCharactersResponse,
+  type OrderBy,
+} from '../schemas'
 import { fixCharacterData } from './utils'
-
-export const getCharactersResponseSchema = z.object({
-  offset: z.number(),
-  limit: z.number(),
-  total: z.number(),
-  count: z.number(),
-  results: z.array(characterSchema),
-})
-
-export type GetCharactersResponseData = z.infer<
-  typeof getCharactersResponseSchema
->
-
-type GetCharactersResponse = {
-  data: GetCharactersResponseData
-}
 
 type GetCharactersParams = {
   page: number
@@ -49,12 +36,12 @@ export const getCharacters = async ({
     })
     .json<GetCharactersResponse>()
 
-  const parsedData = getCharactersResponseSchema.parse(response.data)
+  const parsedResponse = getCharactersResponseSchema.parse(response)
 
   return {
-    ...parsedData,
-    results: parsedData.results.map(fixCharacterData),
-  } satisfies GetCharactersResponseData
+    ...parsedResponse.data,
+    results: parsedResponse.data.results.map(fixCharacterData),
+  } satisfies GetCharactersResponse['data']
 }
 
 type QueryFnType = typeof getCharacters
