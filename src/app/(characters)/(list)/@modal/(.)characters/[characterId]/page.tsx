@@ -35,7 +35,7 @@ async function CharacterDetailsWrapper({
 }: CharacterDetailsWrapperProps) {
   const [, character] = await until(() => getCharacterById(characterId))
 
-  const hasComics = character!.comics.items.length > 0
+  const hasComics = character!.comics.available > 0
 
   return <CharacterDetails character={character!} hasComics={hasComics} />
 }

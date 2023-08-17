@@ -65,7 +65,7 @@ export default async function CharacterDetailsPage({
     return redirect('/')
   }
 
-  const hasComics = character.comics.items.length > 0
+  const hasComics = character.comics.available > 0
 
   return (
     <main className="container my-10 space-y-10">
