@@ -37,13 +37,22 @@ pnpm install
 Create a `.env` file in the root directory and add the following:
 
 ```bash
-NEXT_PUBLIC_MARVEL_API_URL=https://gateway.marvel.com/v1/public
-NEXT_PUBLIC_MARVEL_API_KEY=<your-marvel-api-key>
+MARVEL_API_URL=https://gateway.marvel.com/v1/public
+MARVEL_API_PUBLIC_KEY=<your-marvel-api-public-key>
 MARVEL_API_PRIVATE_KEY=<your-marvel-api-private-key>
+
+# Vercel KV
+KV_REST_API_READ_ONLY_TOKEN=<your-kv-rest-api-read-only-token>
+KV_REST_API_TOKEN=<your-kv-rest-api-token>
+KV_REST_API_URL=<your-kv-rest-api-url>
+KV_URL=<your-kv-url>
 ```
 
 Replace `<your-marvel-api-key>` and `<your-marvel-api-private-key>` with your actual keys.
 You can get them at [Marvel Developer Portal](https://developer.marvel.com).
+
+Replace `<your-kv-rest-api-read-only-token>`, `<your-kv-rest-api-token>`, `<your-kv-rest-api-url>` and `<your-kv-url>` with your actual keys.
+You can get them at [Vercel KV](https://vercel.com/storage/kv).
 
 ## Usage
 
